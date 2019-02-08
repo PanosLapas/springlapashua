@@ -1,0 +1,107 @@
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security-4.1.xsd
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<beans:bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<beans:property name="url"
+			value="jdbc:mysql://83.212.105.20:3306/it20915?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<beans:property name="username" value="it20915" />
+		<beans:property name="password" value="root123" />
+	</beans:bean>
+	
+	<beans:bean id="dataSource_1"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<beans:property name="url"
+			value="jdbc:mysql://tsadimas.hua.gr:3306/dist_syst" />
+		<beans:property name="username" value="dist_syst" />
+		<beans:property name="password" value="d1stR" />
+	</beans:bean>
+
+	<http security="none" pattern="/resource/**" />
+
+	<!-- enable use-expressions -->
+	<http use-expressions="true" auto-config="true">
+		<access-denied-handler error-page="/403page" />
+		<!-- ACCESS FOR USERS -->
+		<intercept-url pattern="/users/register" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/users/all" access="hasAnyRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/users/delete" access="hasAnyRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/users/load" access="hasAnyRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/users/user" access="hasAnyRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/users/profile" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_ADMIN','ROLE_COMMITTE_MEMBER')" />
+		<intercept-url pattern="/users/searchusers" access="hasAnyRole('ROLE_ADMIN')" />
+		
+		<!-- ACCESS FOR COMMITTES -->
+		<intercept-url pattern="/committe/create" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/upload" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/all" access="hasAnyRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/loadcom" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/searchcom" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/modify/**" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/delete/**" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/deleteDoc/**" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/deleteMember/**" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/addMember/**" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/history" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/committe/search_history" access="hasAuthority('ROLE_ADMIN')" />
+		
+		<intercept-url pattern="/committe/update_bymember/**" access="hasAnyRole('ROLE_COMMITTE_ADMIN')" />
+		<intercept-url pattern="/committe/all_bymember" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_COMMITTE_MEMBER')" />
+		<intercept-url pattern="/committe/loadcom_bymember" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_COMMITTE_MEMBER')" />
+		<intercept-url pattern="/committe/search_bymember" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_COMMITTE_MEMBER')" />
+		<intercept-url pattern="/committe/modify_bymember/**" access="hasAuthority('ROLE_COMMITTE_ADMIN')" />
+		<intercept-url pattern="/committe/deleteDoc_bymember/**" access="hasAuthority('ROLE_COMMITTE_ADMIN')" />
+		<intercept-url pattern="/committe/deleteMember_bymember/**" access="hasAuthority('ROLE_COMMITTE_ADMIN')" />
+		<intercept-url pattern="/committe/addMember_bymember/**" access="hasAuthority('ROLE_COMMITTE_ADMIN')" />
+		
+		
+		<intercept-url pattern="/committe/download" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_ADMIN','ROLE_COMMITTE_MEMBER')" />
+		<intercept-url pattern="/committe/downloadAll" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_ADMIN','ROLE_COMMITTE_MEMBER')" />
+		
+		<!-- 
+		<intercept-url pattern="/users/administer" access="hasAuthority('ROLE_ADMIN')" />
+		<intercept-url pattern="/users/**" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_ADMIN','ROLE_COMMITTE_MEMBER')" />
+		<intercept-url pattern="/admin/**" access="hasAuthority('ROLE_ADMIN')" />
+		-->
+		
+		<!-- GENERAL PAGES ACCESS -->
+		<intercept-url pattern="/" access="permitAll" />
+		<intercept-url pattern="/logout" access="permitAll" />
+		<intercept-url pattern="/home" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_ADMIN')" />
+		<intercept-url pattern="/index" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_ADMIN','ROLE_COMMITTE_MEMBER')" />
+		
+		<form-login login-page='/login' username-parameter="username"
+			password-parameter="password" default-target-url="/index"
+			authentication-failure-url="/login?authfailed" />
+		<logout logout-success-url="/login?logout" invalidate-session="true"
+			logout-url="/logout" delete-cookies="JSESSIONID" />
+		
+		<!-- enable remember me -->			
+		<!-- <remember-me token-validity-seconds="1209600"
+			remember-me-parameter="remember-me" data-source-ref="dataSource" /> -->
+	</http>
+
+
+	<!-- Select users and user_roles from database -->
+	<authentication-manager>
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query="select Username,Password,Id from User where Username=?"
+				authorities-by-username-query="select r.Username,r.Rolename from User_Role r join User u on u.Id = r.UserId where r.Username=?" />
+			<!-- <jdbc-user-service data-source-ref="dataSource_1"
+				users-by-username-query="select name as username ,password, enabled from Users where name=?"
+				authorities-by-username-query="SELECT name as username, authority as role
+													FROM Users, User_roles
+													WHERE name =  ?
+													AND Users.id = User_roles.user_id" /> -->
+		</authentication-provider>
+	</authentication-manager>
+
+</beans:beans>
