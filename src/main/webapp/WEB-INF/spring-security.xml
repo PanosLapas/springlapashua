@@ -95,13 +95,8 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 			<jdbc-user-service data-source-ref="dataSource"
 				users-by-username-query="select Username,Password,Id from User where Username=?"
 				authorities-by-username-query="select r.Username,r.Rolename from User_Role r join User u on u.Id = r.UserId where r.Username=?" />
-			<!-- <jdbc-user-service data-source-ref="dataSource_1"
-				users-by-username-query="select name as username ,password, enabled from Users where name=?"
-				authorities-by-username-query="SELECT name as username, authority as role
-													FROM Users, User_roles
-													WHERE name =  ?
-													AND Users.id = User_roles.user_id" /> -->
 		</authentication-provider>
 	</authentication-manager>
+	
 
 </beans:beans>

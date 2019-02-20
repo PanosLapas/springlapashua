@@ -80,6 +80,11 @@
 							</c:if>
 					</div>
 				</div>
+				<br>
+				<div class="alert alert-danger" id="user_exists" style="display:none;">
+				  Ο χρήστης αυτός είναι ήδη εγγεγραμμένος!
+				</div>
+				<br>
 				<c:if test="${user.id == 0}" >
 				 <input type="submit" class="btn btn-lg btn-success" value="Προσθήκη" id="add" disabled="true"/> 
 				</c:if>
@@ -167,6 +172,7 @@
 							        dataType : 'json',
 							        data : postdata,
 							        success : function(result) {
+							        	
 							           showLDAPUser(result);
 							        },
 							        error : function() {
@@ -197,7 +203,25 @@
 							//email.value=user.email;
 							//user_name.value=user.username;
 							//password.value=user.password;
-							document.getElementById('add').disabled=false;
+							
+							if(user.exists == true)
+							{
+								document.getElementById('add').disabled=true;
+								document.getElementById('user_exists').style.display="block";
+							}
+							else
+							{
+								if(!user.email)
+								{
+									//do nothing
+								}
+								else
+								{
+									document.getElementById('user_exists').style.display="none";
+									document.getElementById('add').disabled=false;
+								}	
+							}
+							
 						}
 
 					});

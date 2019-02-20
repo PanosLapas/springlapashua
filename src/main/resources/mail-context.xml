@@ -17,7 +17,7 @@
 		    </property>
 		</bean>
 		
-		<bean id="mailMail" class="com.panos.first.CustomMail">  
+		<bean id="mailMail" class="com.hua.committee.CustomMail">  
 		    <property name="mailSender" ref="mailSender" />  
 		</bean>  
 	

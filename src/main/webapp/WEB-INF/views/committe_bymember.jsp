@@ -116,7 +116,7 @@
 							</div>
 						</c:if>
 					</c:if>
-					<div id="myModal_<c:out value="${committe.id}" />" class="modal fade firstModals" role="dialog">
+					<div id="MEMmyModal_<c:out value="${committe.id}" />" class="modal fade firstModals" role="dialog">
 					    <div class="modal-dialog">
 					        <div class="modal-content">
 					            <div class="modal-header btn-info" style="font-weight:bold;color:white;">

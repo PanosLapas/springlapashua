@@ -12,9 +12,15 @@
 	<br>
 	<div class="well">
 		<c:if test="${committe.id == 0}" >
+			 <script>	$('.menu-ul li.active').removeClass('active');
+						$('#add_committe').addClass('active');
+			</script>
 			 <h4>Εισαγωγή νέας επιτροπής</h4> 
 		</c:if>
 		<c:if test="${committe.id > 0}" >
+			<script>	$('.menu-ul li.active').removeClass('active');
+						$('#committes').addClass('active');
+			</script>
 			 <h4>Τροποποίηση επιτροπής</h4> 
 		</c:if>
 	</div>
@@ -92,10 +98,10 @@
 					<div class="alert alert-warning">
 					<strong>Tip!</strong> Προσθέστε νέα μέλη στην επιτροπή επιλέγοντας το username του χρήστη και στην συνέχεια επιλέξτε τον ρόλο του.<br>
 										  Τα νέα μέλη θα ειδοποιηθούν με email για την προσθήκη τους σε αυτή την επιτροπή.
-						<span class="btn btn-primary pull-right"  onclick='showModal(<c:out value="${committe.id}" />)'>Προσθήκη</span>
+						<span class="btn btn-primary pull-right"  onclick='showMEMModal(<c:out value="${committe.id}" />)'>Προσθήκη</span>
 					</div>
 					</c:if>
-					<div id="myModal_<c:out value="${committe.id}" />" class="modal fade firstModals" role="dialog">
+					<div id="MEMmyModal_<c:out value="${committe.id}" />" class="modal fade firstModals" role="dialog">
 					    <div class="modal-dialog">
 					        <div class="modal-content">
 					            <div class="modal-header btn-info" style="font-weight:bold;color:white;">
@@ -139,7 +145,7 @@
 									<i class="glyphicon glyphicon-trash" style="color: red;"></i>
 								</a>
 						   </div>
-						   <div id="myModal_<c:out value="${doc.id}" />" class="modal fade firstModals" role="dialog">
+						   <div id="DOCmyModal_<c:out value="${doc.id}" />" class="modal fade firstModals" role="dialog">
 							    <div class="modal-dialog modal-sm">
 							        <div class="modal-content">
 							            <div class="modal-header btn-warning" style="font-weight:bold;color:white;">
@@ -197,9 +203,6 @@
 	$(document)
 			.ready(
 					function() {
-						
-						$('.menu-ul li.active').removeClass('active');
-						$('#add_committe').addClass('active');
 						
 						$('.DeleteBtnID').on('click', function () {
 							var url = '/committee/committe/deleteDoc/' + $(this).val();
@@ -368,9 +371,16 @@
 
 					});
 	
+	
 	function showModal(id)
 	{
-		var modal = '#myModal_' + id;
+		var modal = '#DOCmyModal_' + id;
+		$(modal).modal(); 
+	}
+	
+	function showMEMModal(id)
+	{
+		var modal = '#MEMmyModal_' + id;
 		$(modal).modal(); 
 	}
 	

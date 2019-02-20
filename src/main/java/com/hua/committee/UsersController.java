@@ -287,6 +287,13 @@ public class UsersController {
                     user.setUsername((attrs.get("mail")).toString().substring(6));
                     user.setUsername(user.getUsername().substring(0, user.getUsername().length() - 7));
                     user.setPassword((attrs.get("mail")).toString().substring(6));
+                    
+                    User user_exists = new User();
+                    user_exists = userDAO.getByEmail(user.getEmail());
+                    if(user_exists.getId() > 0 )
+                    	user.setExists(true);
+                    else
+                    	user.setExists(false);
 
                 }else{
                     throw new Exception("Invalid User");

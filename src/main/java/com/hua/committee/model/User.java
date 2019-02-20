@@ -20,6 +20,7 @@ public class User implements Serializable {
 	private String RoleName;
 	private int total;
 	private boolean InCommitte;
+	private boolean Exists;
 	
 	public String getRoleName() {
 		return RoleName;
@@ -104,5 +105,11 @@ public class User implements Serializable {
 	}
 	public void setInCommitte(boolean inCommitte){
 		InCommitte = inCommitte;
+	}
+	public boolean getExists(){
+		return Exists;
+	}
+	public void setExists(boolean exists){
+		Exists = exists;
 	}
 }

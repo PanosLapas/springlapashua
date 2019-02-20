@@ -594,6 +594,22 @@ public class CommitteController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userDAO.getByUsername(auth.getName());
 		
+		//check if user has access to this committee as member
+		boolean hasAccess=false;
+		List<Member> members = new ArrayList<Member>();
+		members=memberDAO.getByCommitteId(committeId);
+		for(int i=0;i<members.size();i++)
+		{
+			if(members.get(i).UserId == user.getId())
+			{
+				hasAccess=true;
+				break;
+			}
+		}
+		
+		if(hasAccess == false)
+			return "redirect:/committe/all_bymember";
+		
 		if(userRoleDAO.getUserRole(user.getId(),committeId))
 		{
 			isCommitteAdmin = true;
@@ -609,8 +625,7 @@ public class CommitteController {
 		model.addAttribute("docs", docs);
 		
 		logger.info("modify_bymember committe " + committeId + " get members");
-		List<Member> members = new ArrayList<Member>();
-		members=memberDAO.getByCommitteId(committeId);
+		
 		for(int i=0; i < members.size(); i++)
 		{
 			if(members.get(i).getRole().equals(RolesEnum.ROLE_COMMITTE_ADMIN.rolename())){
@@ -710,7 +725,7 @@ public class CommitteController {
  		
  		documentDAO.deleteById(docId);
  		
- 		List<Document> docs = new ArrayList<Document>();
+ 		/*List<Document> docs = new ArrayList<Document>();
  		docs = documentDAO.getByCommitteId(committeId);
 		model.addAttribute("docs", docs);
 		
@@ -738,7 +753,7 @@ public class CommitteController {
 			emails.add(users.get(i).getEmail());
 		}
 		
-		model.addAttribute("emails", emails);
+		model.addAttribute("emails", emails);*/
 		
 		//save follow up
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -750,7 +765,8 @@ public class CommitteController {
 		history.setAction("Ο χρήστης " + user.getLastName() + " " + user.getFirstName() + " διέγραψε από την επιτροπή " + committe.getTitle() + " το αρχείο με όνομα : " + doc.getTitle());
 		committeFollowUpDAO.save(history);
  		
-		return "committe";
+		return "redirect:/committe/modify/" + committeId;
+		//return "committe";
 	}
 	
 	@RequestMapping(value = "deleteDoc_bymember/{docId:\\d+}&{committeId:\\d+}", method = RequestMethod.GET)
@@ -765,7 +781,7 @@ public class CommitteController {
  		
  		documentDAO.deleteById(docId);
  		
- 		List<Document> docs = new ArrayList<Document>();
+ 		/*List<Document> docs = new ArrayList<Document>();
  		docs = documentDAO.getByCommitteId(committeId);
 		model.addAttribute("docs", docs);
 		
@@ -793,7 +809,7 @@ public class CommitteController {
 			emails.add(users.get(i).getEmail());
 		}
 		
-		model.addAttribute("emails", emails);
+		model.addAttribute("emails", emails);*/
 		
 		//save follow up
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -805,7 +821,8 @@ public class CommitteController {
 		history.setAction("Ο χρήστης " + user.getLastName() + " " + user.getFirstName() + " διέγραψε από την επιτροπή " + committe.getTitle() + " το αρχείο με όνομα : " + doc.getTitle());
 		committeFollowUpDAO.save(history);
  		
-		return "committe_bymember";
+		return "redirect:/committe/modify_bymember/" + committeId + "&" + true;
+		//return "committe_bymember";
 	}
 	
 	@RequestMapping(value = "deleteMember/{memberId:\\d+}&{committeId:\\d+}", method = RequestMethod.GET)
@@ -821,7 +838,7 @@ public class CommitteController {
  		memberDAO.deleteById(memberId);
  		userRoleDAO.deleteByCommitteId(committeId,member.getUserId());
  		
- 		List<Document> docs = new ArrayList<Document>();
+ 		/*List<Document> docs = new ArrayList<Document>();
  		docs = documentDAO.getByCommitteId(committeId);
 		model.addAttribute("docs", docs);
 		
@@ -849,7 +866,7 @@ public class CommitteController {
 			emails.add(users.get(i).getEmail());
 		}
 		
-		model.addAttribute("emails", emails);
+		model.addAttribute("emails", emails);*/
 		
 		//send email to member
 		Resource r=new ClassPathResource("mail-context.xml");  
@@ -874,7 +891,8 @@ public class CommitteController {
 		history.setAction("Ο χρήστης " + user.getLastName() + " " + user.getFirstName() + " διέγραψε από την επιτροπή " + committe.getTitle() + " τον χρήστη με όνομα : " + member.getLastName() + " " + member.getFirstName() );
 		committeFollowUpDAO.save(history);
  		
-		return "committe";
+		return "redirect:/committe/modify/" + committeId;
+		//return "committe";
 	}
 	
 	@RequestMapping(value = "deleteMember_bymember/{memberId:\\d+}&{committeId:\\d+}", method = RequestMethod.GET)
@@ -891,7 +909,7 @@ public class CommitteController {
  		memberDAO.deleteById(memberId);
  		userRoleDAO.deleteByCommitteId(committeId,member.getUserId());
  		
- 		List<Document> docs = new ArrayList<Document>();
+ 		/*List<Document> docs = new ArrayList<Document>();
  		docs = documentDAO.getByCommitteId(committeId);
 		model.addAttribute("docs", docs);
 		
@@ -919,7 +937,7 @@ public class CommitteController {
 			emails.add(users.get(i).getEmail());
 		}
 		
-		model.addAttribute("emails", emails);
+		model.addAttribute("emails", emails);*/
 		
 		//send email to member
 		Resource r=new ClassPathResource("mail-context.xml");  
@@ -943,8 +961,9 @@ public class CommitteController {
 		history.setUserId(user.getId());
 		history.setAction("Ο χρήστης " + user.getLastName() + " " + user.getFirstName() + " διέγραψε από την επιτροπή " + committe.getTitle() + " τον χρήστη με όνομα : " + member.getLastName() + " " + member.getFirstName() );
 		committeFollowUpDAO.save(history);
- 		
-		return "committe_bymember";
+ 	
+		return "redirect:/committe/modify_bymember/" + committeId + "&" + true;
+		//return "committe_bymember";
 	}
 	
 	@RequestMapping(value = "addMember/{committeId:\\d+}&{member}&{isAdmin}", method = RequestMethod.GET) 
@@ -995,7 +1014,7 @@ public class CommitteController {
 		
 		//Get updated committe
 		Committe committe = committeDAO.getById(committeId);
- 		model.addAttribute("committe", committe);
+ 		/*model.addAttribute("committe", committe);
  		
  		logger.info("add memmber to committe " + committeId + " get docs");
  		List<Document> docs = new ArrayList<Document>();
@@ -1029,6 +1048,7 @@ public class CommitteController {
 		}
 		
 		model.addAttribute("emails", emails);
+		*/
 		
 		//send email to new member
 		Resource r=new ClassPathResource("mail-context.xml");  
@@ -1055,7 +1075,8 @@ public class CommitteController {
 				+ member.getLastName() + " " + member.getFirstName() + " και με ρόλο : " + role);
 		committeFollowUpDAO.save(history);
 		
-		return "committe";
+		return "redirect:/committe/modify/" + committeId;
+		//return "committe";
 	}
 	
 	@RequestMapping(value = "addMember_bymember/{committeId:\\d+}&{member}&{isAdmin}", method = RequestMethod.GET) 
@@ -1107,7 +1128,7 @@ public class CommitteController {
 		//Get updated committe
 		Committe committe = committeDAO.getById(committeId);
 		committe.setIsCommitteAdmin(true);
- 		model.addAttribute("committe", committe);
+ 		/*model.addAttribute("committe", committe);
  		
  		logger.info("add memmber to committe " + committeId + " get docs");
  		List<Document> docs = new ArrayList<Document>();
@@ -1140,7 +1161,7 @@ public class CommitteController {
 			emails.add(users.get(i).getEmail());
 		}
 		
-		model.addAttribute("emails", emails);
+		model.addAttribute("emails", emails);*/
 		
 		//send email to new member
 		Resource r=new ClassPathResource("mail-context.xml");  
@@ -1167,7 +1188,8 @@ public class CommitteController {
 				+ member.getLastName() + " " + member.getFirstName() + " και με ρόλο : " + role);
 		committeFollowUpDAO.save(history);
 		
-		return "committe_bymember";
+		return "redirect:/committe/modify_bymember/" + committeId + "&" + true;
+		//return "committe_bymember";
 	}
 	
 	@RequestMapping(value = "history", method = RequestMethod.GET)
