@@ -575,9 +575,20 @@ public class CommitteController {
 		List<User> users = new ArrayList<User>();
 		users=userDAO.getAllUsers();
 		List<String> emails = new ArrayList<String>();
+		boolean already_member = false;
+		
 		for(int i=0;i<users.size();i++)
 		{
-			emails.add(users.get(i).getEmail());
+			already_member = false;
+			for(int j=0; j<members.size(); j++)
+			{
+				if(members.get(j).getEmail().equals(users.get(i).getEmail()))
+				{
+					already_member = true;
+				}
+			}
+			if(already_member == false)
+				emails.add(users.get(i).getEmail());
 		}
 		
 		logger.info("modify committe " + committeId + " add users_emails");
@@ -647,9 +658,20 @@ public class CommitteController {
 		List<User> users = new ArrayList<User>();
 		users=userDAO.getAllUsers();
 		List<String> emails = new ArrayList<String>();
+		boolean already_member = false;
+		
 		for(int i=0;i<users.size();i++)
 		{
-			emails.add(users.get(i).getEmail());
+			already_member = false;
+			for(int j=0; j<members.size(); j++)
+			{
+				if(members.get(j).getEmail().equals(users.get(i).getEmail()))
+				{
+					already_member = true;
+				}
+			}
+			if(already_member == false)
+				emails.add(users.get(i).getEmail());
 		}
 		
 		logger.info("modify_bymember committe " + committeId + " add users_emails");

@@ -172,7 +172,7 @@ public class UsersController {
 			String sender="commission.test2018@gmail.com";//write here sender gmail id  
 			String receiver=user.getEmail();//write here receiver id  
 			
-			String subject="Έχετε προστεθεί ως χρήστης στην ηλεκτρονική πλατφόρμα Διαχείρισης Επιτροπών. " + System.lineSeparator() + "Ο κωδικός χρήστη είναι: " + user.getUsername() + System.lineSeparator() + "O κωδικός πρόσβασης είναι: " + user.getPassword() + System.lineSeparator() + "Θα ενημερωθείτε μέσω email για την προσθήκη σας σε κάποια επιτροπή. Αφού λάβετε αυτό το email, συνδεθείτε στο localhost:8080/first, τροποποιήστε τα στοιχεία σύνδεσης του λογαριασμού σας και δείτε πληροφορίες για την επιτροπή." ;
+			String subject="Έχετε προστεθεί ως χρήστης στην ηλεκτρονική πλατφόρμα Διαχείρισης Επιτροπών. " + System.lineSeparator() + "Ο κωδικός χρήστη είναι: " + user.getUsername() + System.lineSeparator() + "O κωδικός πρόσβασης είναι: " + user.getPassword() + System.lineSeparator() + "Θα ενημερωθείτε μέσω email για την προσθήκη σας σε κάποια επιτροπή. Αφού λάβετε αυτό το email, συνδεθείτε στην εφαρμογή, τροποποιήστε τα στοιχεία σύνδεσης του λογαριασμού σας και δείτε πληροφορίες για την επιτροπή." ;
 			m.sendMail(sender,receiver,"Εισαγωγή χρήστη στο σύστημα Διαχείρισης Επιτροπών",subject);
 		} else {
 			userDAO.update(user);

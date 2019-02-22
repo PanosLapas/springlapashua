@@ -68,7 +68,7 @@
 				<br>
 				<div class="form-group">
 					<c:if test="${committe.id > 0}" >
-						<label>Μέλη Επιτροπής*</label><br>
+						<label>Μέλη Επιτροπής</label><br>
 						 <c:choose>
 						  <c:when test="${members.size() >= 1}">
 						  	<c:forEach items="${members}" var="member">

@@ -105,6 +105,10 @@
 <script type="text/javascript">
 	$(document).ready(
 					function() {
+						
+						$('.menu-ul li.active').removeClass('active');
+						$('#users').addClass('active');
+						
 						$("form[name='userForm']")
 								.validate(
 										{
