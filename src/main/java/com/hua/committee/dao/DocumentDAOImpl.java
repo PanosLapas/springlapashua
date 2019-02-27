@@ -104,12 +104,7 @@ public class DocumentDAOImpl implements DocumentDAO{
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
 		jdbcTemplate.execute(query);
-		
-//		Object queryForObject = jdbcTemplate.queryForObject(query, new Object[] { id },
-//				new BeanPropertyRowMapper<Document>(Document.class));
-//		Document document = (Document) queryForObject;
-		
-		//return true;
+
 	}
 
 	@Override

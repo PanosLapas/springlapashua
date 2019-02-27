@@ -57,7 +57,7 @@ public class UsersController {
 	@RequestMapping(value = "all", method = RequestMethod.GET)
 	public String users(Model model,Authentication authentication) {
 		List<User> usersList= userDAO.getAll(1,0);
-		//logger.info("in users/all" + usersList.toString());
+		
 		model.addAttribute("usersList", usersList);
 		int total = userDAO.getCount();
 		int total_pages = 0;
@@ -119,11 +119,10 @@ public class UsersController {
 	
 	@RequestMapping(value = "profile", method = RequestMethod.GET)
 	public String getProfile(Model model) {
-		logger.info("in profile");
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userDAO.getByUsername(auth.getName());
-		//int userId = user.getId(); 
-		//user = userDAO.getById(userId);
+		
 		model.addAttribute("user", user);
 		return "profile";
 	}
@@ -134,7 +133,6 @@ public class UsersController {
 		if (result.hasErrors()) {
 			return "user";
 		}
-		logger.info("in profile@@");
 		userDAO.update(user);
 
 		return "redirect:/index";
@@ -147,7 +145,6 @@ public class UsersController {
 		if (userDAO.deleteById(userId)) {
 			return "redirect:/users/all";
 		} else {
-			logger.info("in error");
 			model.addAttribute("message", "Error when deleting user");
 			return "test";
 		}
@@ -161,7 +158,6 @@ public class UsersController {
 			return "user";
 		}
 
-		logger.info("form name " + user.getLastName());
 		if (user.getId() == 0) {
 			userDAO.save(user);
 			Resource r=new ClassPathResource("mail-context.xml");  
@@ -197,7 +193,6 @@ public class UsersController {
     {
 		
 		String username=request.getParameter("username");
-		logger.info("username: " + username);
 		
 		List<User> usersList= userDAO.getAllSearch(username);
 
@@ -274,12 +269,6 @@ public class UsersController {
                 
                 if (answer.hasMore()) {
                     Attributes attrs = ((SearchResult) answer.next()).getAttributes();
-                    System.out.println("distinguishedName "+ attrs.get("distinguishedName"));
-                    System.out.println("givenname "+ attrs.get("givenname"));
-                    System.out.println("sn "+ attrs.get("sn"));
-                    System.out.println("mail "+ attrs.get("mail"));
-                    System.out.println("department "+ attrs.get("department"));
-                    System.out.println("title "+ attrs.get("title"));
                     
                     user.setFirstName((attrs.get("givenname")).toString().substring(11));
                     user.setLastName((attrs.get("sn")).toString().substring(4));

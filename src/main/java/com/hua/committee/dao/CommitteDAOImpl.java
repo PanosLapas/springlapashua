@@ -53,7 +53,6 @@ public class CommitteDAOImpl implements CommitteDAO {
 		Date date =new java.sql.Date(Calendar.getInstance().getTime().getTime());
 		//JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-		logger.info("committe saving");
 	    
 	    String sql = "insert into Committe (UserId,Title, GeneralInfo,MeetingDate,CreationDate,Status,ReminderSent) values (?, ?, ?, ?, ?, ?,?)";
 	    SqlUpdate su = new SqlUpdate();
@@ -74,7 +73,6 @@ public class CommitteDAOImpl implements CommitteDAO {
 	    su.update(params,keyHolder);
 	    int id = keyHolder.getKey().intValue();
 		
-        logger.info("done saving");
 		committe.setId(id);
 		
 		return committe;
@@ -190,21 +188,6 @@ public class CommitteDAOImpl implements CommitteDAO {
 			jdbcTemplate.execute(query);
 		}
 		
-		//delete User_Roles if existing
-//		query = "select CommitteId from User_Role where CommitteId = " + id;
-//		jdbcTemplate = new JdbcTemplate(dataSource);
-//	
-//		Rows = jdbcTemplate.queryForList(query);
-//	
-//		for (Map<String, Object> Row : Rows) {
-//			
-//			query = "delete from User_Role where id = " + Integer.parseInt(String.valueOf(Row.get("CommitteId")));
-//			jdbcTemplate = new JdbcTemplate(dataSource);
-//
-//			jdbcTemplate.execute(query);
-//		}
-		
-		
 		//delete committe
 		try {
 			jdbcTemplate = new JdbcTemplate(dataSource);
@@ -232,7 +215,6 @@ public class CommitteDAOImpl implements CommitteDAO {
 			committe.setId(Integer.parseInt(String.valueOf(committeRow.get("Id"))));
 			committe.setTitle(String.valueOf(committeRow.get("Title")));
 			committe.setGeneralInfo(String.valueOf(committeRow.get("GeneralInfo")));
-			logger.info(String.valueOf(committeRow.get("MeetingDate")));
 			
 			String DATE_FORMAT_I = "yyyy-MM-dd hh:mm:ss.S";
 			//String DATE_FORMAT_O = "dd-MM-yyyy";
@@ -277,7 +259,7 @@ public class CommitteDAOImpl implements CommitteDAO {
 			committe.setId(Integer.parseInt(String.valueOf(committeRow.get("Id"))));
 			committe.setTitle(String.valueOf(committeRow.get("Title")));
 			committe.setGeneralInfo(String.valueOf(committeRow.get("GeneralInfo")));
-			logger.info(String.valueOf(committeRow.get("MeetingDate")));
+			
 			
 			String DATE_FORMAT_I = "yyyy-MM-dd hh:mm:ss.S";
 			//String DATE_FORMAT_O = "dd-MM-yyyy";
@@ -293,9 +275,6 @@ public class CommitteDAOImpl implements CommitteDAO {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			//committe.setMeetingDate((Date) dateString);
-			//logger.info(committe.getMeetingDate().toString());
 			
 			committesList.add(committe);
 		}
@@ -334,13 +313,10 @@ public class CommitteDAOImpl implements CommitteDAO {
 			committe.setId(Integer.parseInt(String.valueOf(committeRow.get("Id"))));
 			committe.setTitle(String.valueOf(committeRow.get("Title")));
 			committe.setGeneralInfo(String.valueOf(committeRow.get("GeneralInfo")));
-			logger.info(String.valueOf(committeRow.get("MeetingDate")));
 			
 			String DATE_FORMAT_I = "yyyy-MM-dd hh:mm:ss.S";
-			//String DATE_FORMAT_O = "dd-MM-yyyy";
 
 			SimpleDateFormat formatInput = new SimpleDateFormat(DATE_FORMAT_I);
-			//SimpleDateFormat formatOutput = new SimpleDateFormat(DATE_FORMAT_O);
 
 			try {
 				date = formatInput.parse(String.valueOf(committeRow.get("MeetingDate")));
@@ -349,9 +325,6 @@ public class CommitteDAOImpl implements CommitteDAO {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			//committe.setMeetingDate((Date) dateString);
-			//logger.info(committe.getMeetingDate().toString());
 			
 			committesList.add(committe);
 		}
@@ -385,14 +358,11 @@ public class CommitteDAOImpl implements CommitteDAO {
 			committe.setId(Integer.parseInt(String.valueOf(committeRow.get("Id"))));
 			committe.setTitle(String.valueOf(committeRow.get("Title")));
 			committe.setGeneralInfo(String.valueOf(committeRow.get("GeneralInfo")));
-			logger.info(String.valueOf(committeRow.get("MeetingDate")));
 			
 			String DATE_FORMAT_I = "yyyy-MM-dd hh:mm:ss.S";
-			//String DATE_FORMAT_O = "dd-MM-yyyy";
-
+			
 			SimpleDateFormat formatInput = new SimpleDateFormat(DATE_FORMAT_I);
-			//SimpleDateFormat formatOutput = new SimpleDateFormat(DATE_FORMAT_O);
-
+			
 			java.util.Date date;
 			try {
 				date = formatInput.parse(String.valueOf(committeRow.get("MeetingDate")));
@@ -441,10 +411,6 @@ public class CommitteDAOImpl implements CommitteDAO {
 	@Override
 	public List<Committe> getAllSearch(int page,int offset,String date_from, String date_to, String title) {
 		// TODO Auto-generated method stub
-		//int limit = 5;
-		//if(limit == 0)
-			//limit = 5;
-		//cast date_from to right pattern
 		
 	   SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");
 	   SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss" );
@@ -511,14 +477,10 @@ public class CommitteDAOImpl implements CommitteDAO {
 			committe.setId(Integer.parseInt(String.valueOf(committeRow.get("Id"))));
 			committe.setTitle(String.valueOf(committeRow.get("Title")));
 			committe.setGeneralInfo(String.valueOf(committeRow.get("GeneralInfo")));
-			//logger.info(String.valueOf(committeRow.get("MeetingDate")));
 			
 			String DATE_FORMAT_I = "yyyy-MM-dd hh:mm:ss.S";
-			//String DATE_FORMAT_O = "dd-MM-yyyy";
-
+			
 			SimpleDateFormat formatInput = new SimpleDateFormat(DATE_FORMAT_I);
-			//SimpleDateFormat formatOutput = new SimpleDateFormat(DATE_FORMAT_O);
-
 			
 			try {
 				date = formatInput.parse(String.valueOf(committeRow.get("MeetingDate")));
@@ -527,9 +489,6 @@ public class CommitteDAOImpl implements CommitteDAO {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			//committe.setMeetingDate((Date) dateString);
-			//logger.info(committe.getMeetingDate().toString());
 			
 			committesList.add(committe);
 		}
@@ -540,10 +499,6 @@ public class CommitteDAOImpl implements CommitteDAO {
 	@Override
 	public List<Committe> getAllSearchByMember(int userId,int page,int offset,String date_from, String date_to, String title) {
 		// TODO Auto-generated method stub
-		//int limit = 5;
-		//if(limit == 0)
-			//limit = 5;
-		//cast date_from to right pattern
 		
 	   SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");
 	   SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss" );
@@ -620,14 +575,10 @@ public class CommitteDAOImpl implements CommitteDAO {
 			committe.setId(Integer.parseInt(String.valueOf(committeRow.get("Id"))));
 			committe.setTitle(String.valueOf(committeRow.get("Title")));
 			committe.setGeneralInfo(String.valueOf(committeRow.get("GeneralInfo")));
-			//logger.info(String.valueOf(committeRow.get("MeetingDate")));
 			
 			String DATE_FORMAT_I = "yyyy-MM-dd hh:mm:ss.S";
-			//String DATE_FORMAT_O = "dd-MM-yyyy";
-
+			
 			SimpleDateFormat formatInput = new SimpleDateFormat(DATE_FORMAT_I);
-			//SimpleDateFormat formatOutput = new SimpleDateFormat(DATE_FORMAT_O);
-
 			
 			try {
 				date = formatInput.parse(String.valueOf(committeRow.get("MeetingDate")));

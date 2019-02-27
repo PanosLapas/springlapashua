@@ -44,9 +44,7 @@ public class CommitteFollowUpDAOImpl implements CommitteFollowUpDAO{
 	public CommitteFollowUp save(CommitteFollowUp history) {
 		// TODO Auto-generated method stub
 		Date date =new java.sql.Date(Calendar.getInstance().getTime().getTime());
-		//JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-
-		logger.info("committeFollowUp saving");
+		
 		String sql = "";
 		if(history.getCommitteId() > 0)
 			sql = "insert into CommitteFollowUp (CommitteId,UserId,MemberId,CreationDate,Action) values (?, ?, ?, ?, ?)";
@@ -76,7 +74,6 @@ public class CommitteFollowUpDAOImpl implements CommitteFollowUpDAO{
 	    su.update(params,keyHolder);
 	    int id = keyHolder.getKey().intValue();
 		
-        logger.info("done saving FollowUp");
 		history.setId(id);
 		
 		return history;
@@ -160,11 +157,8 @@ public class CommitteFollowUpDAOImpl implements CommitteFollowUpDAO{
 			history.setAction(String.valueOf(historyRow.get("Action")));
 			
 			String DATE_FORMAT_I = "yyyy-MM-dd hh:mm:ss.S";
-			//String DATE_FORMAT_O = "dd-MM-yyyy";
-
+			
 			SimpleDateFormat formatInput = new SimpleDateFormat(DATE_FORMAT_I);
-			//SimpleDateFormat formatOutput = new SimpleDateFormat(DATE_FORMAT_O);
-
 			
 			try {
 				date = formatInput.parse(String.valueOf(historyRow.get("CreationDate")));
@@ -173,9 +167,6 @@ public class CommitteFollowUpDAOImpl implements CommitteFollowUpDAO{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			//committe.setMeetingDate((Date) dateString);
-			//logger.info(committe.getMeetingDate().toString());
 			
 			historyList.add(history);
 		}

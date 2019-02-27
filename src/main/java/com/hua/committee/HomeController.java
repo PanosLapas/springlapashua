@@ -60,8 +60,6 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model,Authentication authentication,SecurityContextHolderAwareRequestWrapper request) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		logger.info("SPRING VERSION " + org.springframework.core.SpringVersion.getVersion());
 		
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
@@ -133,7 +131,6 @@ public class HomeController {
 	public ModelAndView login(@RequestParam(value = "authfailed", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout) {
 
-		logger.info("Welcome.");
 		ModelAndView model = new ModelAndView();
 		if (error != null) {
 			model.addObject("error", "Λάθος συνθηματικό ή κωδικός!");
@@ -149,23 +146,5 @@ public class HomeController {
 		return model;
 
 	}
-	
-	/*@RequestMapping(value = "index", method = RequestMethod.GET)
-	public String users(Model model,Authentication authentication) {
-		
-		if(authentication.getAuthorities().toString().equals("[ROLE_ADMIN]"))
-		{
-			logger.info("Welcome {} - .", authentication.getName());
-			logger.info("Welcome {}.", authentication.getAuthorities().toString());
-			return "home";	
-		}
-		else
-		{
-			logger.info("Welcome {} - .", authentication.getName());
-			logger.info("Welcome {}.", authentication.getAuthorities().toString());
-			return "users";	
-		}
-		
-	}*/
 	
 }

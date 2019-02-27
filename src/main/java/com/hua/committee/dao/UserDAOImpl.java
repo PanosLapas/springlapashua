@@ -113,13 +113,8 @@ public class UserDAOImpl implements UserDAO {
 	public List<User> getAll(int page,int offset) {
 		List<User> usersList = new ArrayList<User>();
 		int limit = 5;
-		//if(limit == 0)
-			//limit = 5;
-		// JDBC Code - Start
 		String query = "select u.Id as Id, u.LastName as LastName, u.FirstName as FirstName, u.Email as Email from User u order by u.Id limit " + limit + " offset " + offset;
-		//," +
-		//   " r.Rolename as Rolename
-		//left join User_Role r on r.UserId = u.Id
+		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
 		List<Map<String, Object>> usersRows = jdbcTemplate.queryForList(query);
@@ -131,12 +126,7 @@ public class UserDAOImpl implements UserDAO {
 			user.setFirstName(String.valueOf(userRow.get("FirstName")));
 			user.setUsername(String.valueOf(userRow.get("Username")));
 			user.setEmail(String.valueOf(userRow.get("Email")));
-			//user.setPassword(String.valueOf(userRow.get("Password")));
-			/*if(userRow.get("RoleName") != null)
-				user.setRoleName(RolesEnum.valueOf(String.valueOf(userRow.get("Rolename"))).rolename());
-			else
-				user.setRoleName("");
-			*/
+			
 			usersList.add(user);
 		}
 
@@ -146,10 +136,7 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public List<User> getAllUsers() {
 		List<User> usersList = new ArrayList<User>();
-		//int limit = 5;
-		//if(limit == 0)
-			//limit = 5;
-		// JDBC Code - Start
+		
 		String query = "select Id,Email from User";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
@@ -182,9 +169,7 @@ public class UserDAOImpl implements UserDAO {
 		// JDBC Code - Start
 		String query = "select u.Id as Id, u.LastName as LastName, u.FirstName as FirstName, u.Email as Email from User u where u.Email like '%" + username + 
 				"%' or u.LastName like '%" + username + "%' or u.FirstName like '%" + username + "%'  order by u.Id";
-		//," +
-		//   " r.Rolename as Rolename
-		//left join User_Role r on r.UserId = u.Id
+		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
 		List<Map<String, Object>> usersRows = jdbcTemplate.queryForList(query);
@@ -196,12 +181,7 @@ public class UserDAOImpl implements UserDAO {
 			user.setFirstName(String.valueOf(userRow.get("FirstName")));
 			user.setUsername(String.valueOf(userRow.get("Username")));
 			user.setEmail(String.valueOf(userRow.get("Email")));
-			//user.setPassword(String.valueOf(userRow.get("Password")));
-			/*if(userRow.get("RoleName") != null)
-				user.setRoleName(RolesEnum.valueOf(String.valueOf(userRow.get("Rolename"))).rolename());
-			else
-				user.setRoleName("");
-			*/
+			
 			usersList.add(user);
 		}
 

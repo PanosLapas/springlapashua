@@ -35,7 +35,6 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public Member save(Member member) {
 		// TODO Auto-generated method stub
-		logger.info("member saving");
 	    
 	    String sql = "insert into Member (CommitteId,LastName,FirstName,Email,Role,UserId) values (?, ?, ?, ?, ?, ?)";
 	    SqlUpdate su = new SqlUpdate();
@@ -55,7 +54,6 @@ public class MemberDAOImpl implements MemberDAO{
 	    su.update(params,keyHolder);
 	    int id = keyHolder.getKey().intValue();
 		
-        logger.info("done saving member");
 		member.setId(id);
 		
 		return member;
@@ -77,11 +75,10 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public List<Member> deleteByCommitteId(int id) {
 		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
-				String query = "delete from Member where CommitteId = " + id;
-				JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		String query = "delete from Member where CommitteId = " + id;
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-				jdbcTemplate.execute(query);
+		jdbcTemplate.execute(query);
 				
 		return null;
 	}

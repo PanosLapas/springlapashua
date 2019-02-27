@@ -65,12 +65,6 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 		<intercept-url pattern="/committe/download" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_ADMIN','ROLE_COMMITTE_MEMBER')" />
 		<intercept-url pattern="/committe/downloadAll" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_ADMIN','ROLE_COMMITTE_MEMBER')" />
 		
-		<!-- 
-		<intercept-url pattern="/users/administer" access="hasAuthority('ROLE_ADMIN')" />
-		<intercept-url pattern="/users/**" access="hasAnyRole('ROLE_COMMITTE_ADMIN','ROLE_ADMIN','ROLE_COMMITTE_MEMBER')" />
-		<intercept-url pattern="/admin/**" access="hasAuthority('ROLE_ADMIN')" />
-		-->
-		
 		<!-- GENERAL PAGES ACCESS -->
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/logout" access="permitAll" />
@@ -83,9 +77,6 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 		<logout logout-success-url="/login?logout" invalidate-session="true"
 			logout-url="/logout" delete-cookies="JSESSIONID" />
 		
-		<!-- enable remember me -->			
-		<!-- <remember-me token-validity-seconds="1209600"
-			remember-me-parameter="remember-me" data-source-ref="dataSource" /> -->
 	</http>
 
 

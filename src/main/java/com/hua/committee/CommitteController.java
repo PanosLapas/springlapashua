@@ -109,7 +109,6 @@ public class CommitteController {
 		committe.setUserId(user.getId());
 		
 		if (result.hasErrors()) {
-			logger.info("error on result");
 			List<FieldError> errors = result.getFieldErrors();
 			for (FieldError error : errors ) {
 		        logger.info(error.getObjectName() + " - " + error.getDefaultMessage());
@@ -329,7 +328,6 @@ public class CommitteController {
 	@RequestMapping(value="/loadcom", method = RequestMethod.GET)
     public @ResponseBody List<CommitteUI> loadCommittees(HttpServletRequest request,HttpServletResponse response)
     {
-		logger.info("load comms");
 		int page = Integer.parseInt(request.getParameter("page"));
 		int offset = (page - 1) * pageSize;
 		
@@ -386,7 +384,6 @@ public class CommitteController {
 		String date_from=request.getParameter("date_from");
 		String date_to=request.getParameter("date_to");
 		String title=request.getParameter("title");
-		logger.info("from: " + date_from + " - to: " + date_to + " - title: " + title);
 
 		List<Committe> committesList= committeDAO.getAllSearch(1,0,date_from,date_to,title);
 		List<CommitteUI> committes = new ArrayList<CommitteUI>();
@@ -436,7 +433,6 @@ public class CommitteController {
 		String date_from=request.getParameter("date_from");
 		String date_to=request.getParameter("date_to");
 		String title=request.getParameter("title");
-		logger.info("from: " + date_from + " - to: " + date_to + " - title: " + title);
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userDAO.getByUsername(auth.getName());
@@ -542,15 +538,12 @@ public class CommitteController {
 	@RequestMapping(value = "modify/{committeId:\\d+}", method = RequestMethod.GET)
 	public String getCommitte(Model model, @PathVariable("committeId") int committeId) {
 		
-		logger.info("modify committe " + committeId);
 		Committe committe = committeDAO.getById(committeId);
  		
- 		logger.info("modify committe " + committeId + " get docs");
  		List<Document> docs = new ArrayList<Document>();
  		docs = documentDAO.getByCommitteId(committeId);
 		model.addAttribute("docs", docs);
 		
-		logger.info("modify committe " + committeId + " get members");
 		List<Member> members = new ArrayList<Member>();
 		members=memberDAO.getByCommitteId(committeId);
 		
@@ -564,14 +557,10 @@ public class CommitteController {
 			{
 				members.get(i).setIsCommittePresident(false);
 			}
-			logger.info("is president : " + members.get(i).getIsCommittePresident());
 		}
 		model.addAttribute("members", members);
 		model.addAttribute("committe", committe);
 		
-		logger.info("has president : " + committe.isHasPresident());
-		
-		logger.info("modify committe " + committeId + " get users");
 		List<User> users = new ArrayList<User>();
 		users=userDAO.getAllUsers();
 		List<String> emails = new ArrayList<String>();
@@ -591,7 +580,6 @@ public class CommitteController {
 				emails.add(users.get(i).getEmail());
 		}
 		
-		logger.info("modify committe " + committeId + " add users_emails");
 		model.addAttribute("emails", emails);
 		
 		return "committe";
@@ -600,7 +588,6 @@ public class CommitteController {
 	@RequestMapping(value = "modify_bymember/{committeId:\\d+}&{isCommitteAdmin}", method = RequestMethod.GET)
 	public String getCommitteByMember(Model model, @PathVariable("committeId") int committeId,@PathVariable("isCommitteAdmin") boolean isCommitteAdmin) {
 		
-		logger.info("modify_bymember committe " + committeId);
 		Committe committe = committeDAO.getById(committeId);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userDAO.getByUsername(auth.getName());
@@ -630,12 +617,10 @@ public class CommitteController {
 		
 		committe.setIsCommitteAdmin(isCommitteAdmin);
  		
- 		logger.info("modify_bymember committe " + committeId + " get docs");
  		List<Document> docs = new ArrayList<Document>();
  		docs = documentDAO.getByCommitteId(committeId);
 		model.addAttribute("docs", docs);
 		
-		logger.info("modify_bymember committe " + committeId + " get members");
 		
 		for(int i=0; i < members.size(); i++)
 		{
@@ -647,14 +632,11 @@ public class CommitteController {
 			{
 				members.get(i).setIsCommittePresident(false);
 			}
-			logger.info("is president : " + members.get(i).getIsCommittePresident());
 		}
 		
-		logger.info("has president : " + committe.isHasPresident());
 		model.addAttribute("committe", committe);
 		model.addAttribute("members", members);
 		
-		logger.info("modify_bymember committe " + committeId + " get users");
 		List<User> users = new ArrayList<User>();
 		users=userDAO.getAllUsers();
 		List<String> emails = new ArrayList<String>();
@@ -674,7 +656,6 @@ public class CommitteController {
 				emails.add(users.get(i).getEmail());
 		}
 		
-		logger.info("modify_bymember committe " + committeId + " add users_emails");
 		model.addAttribute("emails", emails);
  		
 		return "committe_bymember";
@@ -684,7 +665,6 @@ public class CommitteController {
 	@RequestMapping(value = "delete/{committeId:\\d+}", method = RequestMethod.GET)
 	public String deleteById(Model model, @PathVariable("committeId") int committeId) {
 		
-		logger.info("delete committe " + committeId);
 		Committe committe = committeDAO.getById(committeId);
 		List<Committe> committesList = committeDAO.deleteById(committeId);
 		
@@ -732,50 +712,18 @@ public class CommitteController {
 		history.setAction("Ο χρήστης " + user.getLastName() + " " + user.getFirstName() + " διέγραψε την επιτροπή :" + committe.getTitle());
 		committeFollowUpDAO.save(history);
 		
-		//return "committes";
 		return "redirect:/committe/all";
 	}
 	
 	@RequestMapping(value = "deleteDoc/{docId:\\d+}&{committeId:\\d+}", method = RequestMethod.GET)
 	public String deleteDoc(Model model, @PathVariable("docId") int docId, @PathVariable("committeId") int committeId) {
 		
-		logger.info("delete docId " + docId);
 		Document doc = documentDAO.getById(docId);
 		
 		Committe committe = committeDAO.getById(committeId);
  		model.addAttribute("committe", committe);
  		
  		documentDAO.deleteById(docId);
- 		
- 		/*List<Document> docs = new ArrayList<Document>();
- 		docs = documentDAO.getByCommitteId(committeId);
-		model.addAttribute("docs", docs);
-		
-		List<Member> members = new ArrayList<Member>();
-		members=memberDAO.getByCommitteId(committeId);
-		for(int i=0; i < members.size(); i++)
-		{
-			if(members.get(i).getRole().equals(RolesEnum.ROLE_COMMITTE_ADMIN.rolename())){
-				committe.setHasPresident(true);
-				members.get(i).setIsCommittePresident(true);
-			}
-			else
-			{
-				members.get(i).setIsCommittePresident(false);
-			}
-			logger.info("is president : " + members.get(i).getIsCommittePresident());
-		}
-		model.addAttribute("members", members);
-		
-		List<User> users = new ArrayList<User>();
-		users=userDAO.getAllUsers();
-		List<String> emails = new ArrayList<String>();
-		for(int i=0;i<users.size();i++)
-		{
-			emails.add(users.get(i).getEmail());
-		}
-		
-		model.addAttribute("emails", emails);*/
 		
 		//save follow up
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -788,13 +736,12 @@ public class CommitteController {
 		committeFollowUpDAO.save(history);
  		
 		return "redirect:/committe/modify/" + committeId;
-		//return "committe";
+		
 	}
 	
 	@RequestMapping(value = "deleteDoc_bymember/{docId:\\d+}&{committeId:\\d+}", method = RequestMethod.GET)
 	public String deleteDocByMember(Model model, @PathVariable("docId") int docId, @PathVariable("committeId") int committeId) {
 		
-		logger.info("delete docId " + docId);
 		Document doc = documentDAO.getById(docId);
 		
 		Committe committe = committeDAO.getById(committeId);
@@ -802,36 +749,6 @@ public class CommitteController {
  		model.addAttribute("committe", committe);
  		
  		documentDAO.deleteById(docId);
- 		
- 		/*List<Document> docs = new ArrayList<Document>();
- 		docs = documentDAO.getByCommitteId(committeId);
-		model.addAttribute("docs", docs);
-		
-		List<Member> members = new ArrayList<Member>();
-		members=memberDAO.getByCommitteId(committeId);
-		for(int i=0; i < members.size(); i++)
-		{
-			if(members.get(i).getRole().equals(RolesEnum.ROLE_COMMITTE_ADMIN.rolename())){
-				committe.setHasPresident(true);
-				members.get(i).setIsCommittePresident(true);
-			}
-			else
-			{
-				members.get(i).setIsCommittePresident(false);
-			}
-			logger.info("is president : " + members.get(i).getIsCommittePresident());
-		}
-		model.addAttribute("members", members);
-		
-		List<User> users = new ArrayList<User>();
-		users=userDAO.getAllUsers();
-		List<String> emails = new ArrayList<String>();
-		for(int i=0;i<users.size();i++)
-		{
-			emails.add(users.get(i).getEmail());
-		}
-		
-		model.addAttribute("emails", emails);*/
 		
 		//save follow up
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -844,13 +761,12 @@ public class CommitteController {
 		committeFollowUpDAO.save(history);
  		
 		return "redirect:/committe/modify_bymember/" + committeId + "&" + true;
-		//return "committe_bymember";
+		
 	}
 	
 	@RequestMapping(value = "deleteMember/{memberId:\\d+}&{committeId:\\d+}", method = RequestMethod.GET)
 	public String deleteMember(Model model, @PathVariable("memberId") int memberId, @PathVariable("committeId") int committeId) {
 		
-		logger.info("delete memberId " + memberId);
 		
 		Member member = memberDAO.getById(memberId);
 		
@@ -860,36 +776,6 @@ public class CommitteController {
  		memberDAO.deleteById(memberId);
  		userRoleDAO.deleteByCommitteId(committeId,member.getUserId());
  		
- 		/*List<Document> docs = new ArrayList<Document>();
- 		docs = documentDAO.getByCommitteId(committeId);
-		model.addAttribute("docs", docs);
-		
-		List<Member> members = new ArrayList<Member>();
-		members=memberDAO.getByCommitteId(committeId);
-		for(int i=0; i < members.size(); i++)
-		{
-			if(members.get(i).getRole().equals(RolesEnum.ROLE_COMMITTE_ADMIN.rolename())){
-				committe.setHasPresident(true);
-				members.get(i).setIsCommittePresident(true);
-			}
-			else
-			{
-				members.get(i).setIsCommittePresident(false);
-			}
-			logger.info("is president : " + members.get(i).getIsCommittePresident());
-		}
-		model.addAttribute("members", members);
-		
-		List<User> users = new ArrayList<User>();
-		users=userDAO.getAllUsers();
-		List<String> emails = new ArrayList<String>();
-		for(int i=0;i<users.size();i++)
-		{
-			emails.add(users.get(i).getEmail());
-		}
-		
-		model.addAttribute("emails", emails);*/
-		
 		//send email to member
 		Resource r=new ClassPathResource("mail-context.xml");  
 		//@SuppressWarnings("deprecation")
@@ -914,13 +800,12 @@ public class CommitteController {
 		committeFollowUpDAO.save(history);
  		
 		return "redirect:/committe/modify/" + committeId;
-		//return "committe";
+		
 	}
 	
 	@RequestMapping(value = "deleteMember_bymember/{memberId:\\d+}&{committeId:\\d+}", method = RequestMethod.GET)
 	public String deleteMemberByMember(Model model, @PathVariable("memberId") int memberId, @PathVariable("committeId") int committeId) {
 		
-		logger.info("delete memberId " + memberId);
 		
 		Member member = memberDAO.getById(memberId);
 		
@@ -930,37 +815,7 @@ public class CommitteController {
  		
  		memberDAO.deleteById(memberId);
  		userRoleDAO.deleteByCommitteId(committeId,member.getUserId());
- 		
- 		/*List<Document> docs = new ArrayList<Document>();
- 		docs = documentDAO.getByCommitteId(committeId);
-		model.addAttribute("docs", docs);
-		
-		List<Member> members = new ArrayList<Member>();
-		members=memberDAO.getByCommitteId(committeId);
-		for(int i=0; i < members.size(); i++)
-		{
-			if(members.get(i).getRole().equals(RolesEnum.ROLE_COMMITTE_ADMIN.rolename())){
-				committe.setHasPresident(true);
-				members.get(i).setIsCommittePresident(true);
-			}
-			else
-			{
-				members.get(i).setIsCommittePresident(false);
-			}
-			logger.info("is president : " + members.get(i).getIsCommittePresident());
-		}
-		model.addAttribute("members", members);
-		
-		List<User> users = new ArrayList<User>();
-		users=userDAO.getAllUsers();
-		List<String> emails = new ArrayList<String>();
-		for(int i=0;i<users.size();i++)
-		{
-			emails.add(users.get(i).getEmail());
-		}
-		
-		model.addAttribute("emails", emails);*/
-		
+ 	
 		//send email to member
 		Resource r=new ClassPathResource("mail-context.xml");  
 		//@SuppressWarnings("deprecation")
@@ -985,13 +840,11 @@ public class CommitteController {
 		committeFollowUpDAO.save(history);
  	
 		return "redirect:/committe/modify_bymember/" + committeId + "&" + true;
-		//return "committe_bymember";
+		
 	}
 	
 	@RequestMapping(value = "addMember/{committeId:\\d+}&{member}&{isAdmin}", method = RequestMethod.GET) 
 	public String addMember(Model model, @PathVariable("committeId") int committeId,@PathVariable("member") String memberEmail,@PathVariable("isAdmin") boolean isAdmin) { 
-		
-		logger.info("add member " + committeId + " - " + memberEmail + "-" + isAdmin); 
 		
 		//GET Role
 		String role ="";
@@ -1036,42 +889,7 @@ public class CommitteController {
 		
 		//Get updated committe
 		Committe committe = committeDAO.getById(committeId);
- 		/*model.addAttribute("committe", committe);
  		
- 		logger.info("add memmber to committe " + committeId + " get docs");
- 		List<Document> docs = new ArrayList<Document>();
- 		docs = documentDAO.getByCommitteId(committeId);
-		model.addAttribute("docs", docs);
-		
-		logger.info("add memmber to committe " + committeId + " get members");
-		List<Member> members = new ArrayList<Member>();
-		members=memberDAO.getByCommitteId(committeId);
-		for(int i=0; i < members.size(); i++)
-		{
-			if(members.get(i).getRole().equals(RolesEnum.ROLE_COMMITTE_ADMIN.rolename())){
-				committe.setHasPresident(true);
-				members.get(i).setIsCommittePresident(true);
-			}
-			else
-			{
-				members.get(i).setIsCommittePresident(false);
-			}
-			logger.info("is president : " + members.get(i).getIsCommittePresident());
-		}
-		model.addAttribute("members", members);
-		
-		logger.info("add memmber to committe " + committeId + " get user_emails");
-		List<User> users = new ArrayList<User>();
-		users=userDAO.getAllUsers();
-		List<String> emails = new ArrayList<String>();
-		for(int i=0;i<users.size();i++)
-		{
-			emails.add(users.get(i).getEmail());
-		}
-		
-		model.addAttribute("emails", emails);
-		*/
-		
 		//send email to new member
 		Resource r=new ClassPathResource("mail-context.xml");  
 		//@SuppressWarnings("deprecation")
@@ -1098,13 +916,11 @@ public class CommitteController {
 		committeFollowUpDAO.save(history);
 		
 		return "redirect:/committe/modify/" + committeId;
-		//return "committe";
+		
 	}
 	
 	@RequestMapping(value = "addMember_bymember/{committeId:\\d+}&{member}&{isAdmin}", method = RequestMethod.GET) 
 	public String addMemberByMember(Model model, @PathVariable("committeId") int committeId,@PathVariable("member") String memberEmail,@PathVariable("isAdmin") boolean isAdmin) { 
-		
-		logger.info("add member " + committeId + " - " + memberEmail + "-" + isAdmin); 
 		
 		//GET Role
 		String role ="";
@@ -1150,41 +966,7 @@ public class CommitteController {
 		//Get updated committe
 		Committe committe = committeDAO.getById(committeId);
 		committe.setIsCommitteAdmin(true);
- 		/*model.addAttribute("committe", committe);
- 		
- 		logger.info("add memmber to committe " + committeId + " get docs");
- 		List<Document> docs = new ArrayList<Document>();
- 		docs = documentDAO.getByCommitteId(committeId);
-		model.addAttribute("docs", docs);
-		
-		logger.info("add memmber to committe " + committeId + " get members");
-		List<Member> members = new ArrayList<Member>();
-		members=memberDAO.getByCommitteId(committeId);
-		for(int i=0; i < members.size(); i++)
-		{
-			if(members.get(i).getRole().equals(RolesEnum.ROLE_COMMITTE_ADMIN.rolename())){
-				committe.setHasPresident(true);
-				members.get(i).setIsCommittePresident(true);
-			}
-			else
-			{
-				members.get(i).setIsCommittePresident(false);
-			}
-			logger.info("is president : " + members.get(i).getIsCommittePresident());
-		}
-		model.addAttribute("members", members);
-		
-		logger.info("add memmber to committe " + committeId + " get user_emails");
-		List<User> users = new ArrayList<User>();
-		users=userDAO.getAllUsers();
-		List<String> emails = new ArrayList<String>();
-		for(int i=0;i<users.size();i++)
-		{
-			emails.add(users.get(i).getEmail());
-		}
-		
-		model.addAttribute("emails", emails);*/
-		
+ 	
 		//send email to new member
 		Resource r=new ClassPathResource("mail-context.xml");  
 		//@SuppressWarnings("deprecation")
@@ -1211,7 +993,7 @@ public class CommitteController {
 		committeFollowUpDAO.save(history);
 		
 		return "redirect:/committe/modify_bymember/" + committeId + "&" + true;
-		//return "committe_bymember";
+		
 	}
 	
 	@RequestMapping(value = "history", method = RequestMethod.GET)
@@ -1227,8 +1009,6 @@ public class CommitteController {
 		String date_=request.getParameter("date_");
 		String title=request.getParameter("title");
 		String username=request.getParameter("username");
-		
-		logger.info("date: " + date_ + " - username: " + username + " - title: " + title);
 		
 		List<User> usersList= new ArrayList<User>();
 		if(username != "")

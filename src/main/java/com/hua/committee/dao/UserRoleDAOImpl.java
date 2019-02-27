@@ -33,7 +33,6 @@ public class UserRoleDAOImpl implements UserRoleDAO{
 	@Override
 	public UserRole save(UserRole userRole) {
 		// TODO Auto-generated method stub
-		logger.info("user_role saving");
 	    
 	    String sql = "insert into User_Role (UserId,RoleId,Username,Rolename,CommitteId) values (?, ?, ?, ?, ?)";
 	    SqlUpdate su = new SqlUpdate();
@@ -50,9 +49,7 @@ public class UserRoleDAOImpl implements UserRoleDAO{
 	    Object[] params = new Object[]{userRole.getUserId(),userRole.getRoleId(),userRole.getUserName(),userRole.getRoleName(),userRole.getCommitteId()};
 	    KeyHolder keyHolder = new GeneratedKeyHolder();
 	    su.update(params,keyHolder);
-	    //int id = keyHolder.getKey().intValue();
 		
-        logger.info("done saving userRole");
 		
 		return userRole;
 	}
